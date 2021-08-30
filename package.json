@@ -4,6 +4,13 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "run-client": "cd client && yarn && yarn start"
+    "run-client": "cd client && yarn && yarn start",
+    "run-server": "cd server && yarn && yarn dev",
+    "host-server": "cd server && yarn host",
+    "dev": "npm-run-all --parallel run-client run-server",
+    "start": "npm-run-all --parallel run-client host-server"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.5"
   }
 }

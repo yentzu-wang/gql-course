@@ -1,0 +1,12 @@
+version: "3.8"
+services:
+  db:
+    image: mongo:latest
+    restart: always
+    container_name: my_mongo
+    environment:
+      - MONGO_INITDB_DATABASE=todo-list
+      - MONGO_INITDB_ROOT_USERNAME=dbuser
+      - MONGO_INITDB_ROOT_PASSWORD=dbuser12300password
+    ports:
+      - "27017:27017"
