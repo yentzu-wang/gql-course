@@ -9,7 +9,13 @@ export default gql`
     "內容"
     comment: String!
     "優先度"
-    priority: String!
+    priority: Priority!
+  }
+
+  type Priority {
+    id: ID!
+    title: String!
+    rank: Int!
   }
 
   "Values to create a todo"
@@ -19,7 +25,7 @@ export default gql`
     "內容"
     comment: String!
     "優先度"
-    priority: String!
+    priorityId: ID!
   }
 
   "Values to update a todo with a given id"
@@ -34,16 +40,39 @@ export default gql`
     priority: String
   }
 
+  "Values to create a priority option"
+  input PriorityCreateInput {
+    "Title"
+    title: String!
+    "優先等級"
+    rank: Int!
+  }
+
   type CreateTodoResult {
+    "Request status"
     status: Status!
+    "Error message"
     message: String
+    "Result"
     result: Todo
   }
 
   type UpdateTodoResult {
+    "Request status"
     status: Status!
+    "Error message"
     message: String
+    "Result"
     result: Todo
+  }
+
+  type CreatePriorityResult {
+    "Request status"
+    status: Status!
+    "Error message"
+    message: String
+    "Result"
+    result: Priority
   }
 
   type Query {
@@ -51,10 +80,16 @@ export default gql`
     todo(id: ID!): Todo
     "取得全部 TODOs"
     todos: [Todo]
+    "取得優先度選項"
+    priorities: [Priority]
   }
 
   type Mutation {
+    "建立待辦"
     createTodo(input: TodoCreateInput!): CreateTodoResult
+    "更新待辦"
     updateTodo(input: TodoUpdateInput!): UpdateTodoResult
+    "建立優先度選項"
+    createPriority(input: PriorityCreateInput!): CreatePriorityResult
   }
 `
