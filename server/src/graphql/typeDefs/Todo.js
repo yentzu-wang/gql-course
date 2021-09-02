@@ -37,7 +37,7 @@ export default gql`
     "內容"
     comment: String
     "優先度"
-    priorityId: ID!
+    priorityId: ID
   }
 
   "Values to create a priority option"

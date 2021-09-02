@@ -116,7 +116,7 @@ export default {
           {
             _id: ObjectId(id)
           },
-          { $set: { ...restArgs, priorityId } }
+          { $set: { ...restArgs, priority: ObjectId(priorityId) } }
         )
 
         const todo = await collection.findOne({

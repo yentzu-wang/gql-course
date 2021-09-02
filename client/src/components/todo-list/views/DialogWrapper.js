@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import {
   Button,
   Dialog,
@@ -9,10 +9,24 @@ import {
   TextField
 } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
+import { gql, useQuery, useMutation } from "@apollo/client"
 import RadioButtonSection from "./RadioButtonSection"
+import ListView from "./ListView"
 
-const DialogWrapper = ({ open, handleClose, selectedValue, onRadioClick }) => {
+const DialogWrapper = ({ id, open, handleClose, selectedValue }) => {
+  const [date, setDate] = useState()
+  const [comment, setComment] = useState()
+  const [priority, setPriority] = useState()
   const classes = useStyles()
+
+  const { data } = useQuery(DialogWrapper.query.getData, {
+    variables: { id },
+    notifyOnNetworkStatusChange: true,
+    fetchPolicy: "cache-and-network"
+  })
+  const [updateTodo] = useMutation(DialogWrapper.mutation.updateTodo, {
+    refetchQueries: [ListView.query.todos, DialogWrapper.query.getData]
+  })
 
   return (
     <Dialog
@@ -29,7 +43,8 @@ const DialogWrapper = ({ open, handleClose, selectedValue, onRadioClick }) => {
           id="date"
           label="Date"
           type="date"
-          defaultValue="2017-05-24"
+          value={date || data?.todo?.date}
+          onChange={e => setDate(e.target.value)}
           className={classes.textField}
           InputLabelProps={{
             shrink: true
@@ -40,6 +55,8 @@ const DialogWrapper = ({ open, handleClose, selectedValue, onRadioClick }) => {
         <TextField
           label="Detail"
           type="text"
+          defaultValue={comment || data?.todo?.comment}
+          onChange={e => setComment(e.target.value)}
           className={classes.textField}
           InputLabelProps={{
             shrink: true
@@ -47,18 +64,44 @@ const DialogWrapper = ({ open, handleClose, selectedValue, onRadioClick }) => {
         />
         <br />
         <br />
-        {/* TODO: data binding */}
         <RadioButtonSection
-          priorities={[]}
-          selectedValue={selectedValue}
-          onRadioClick={onRadioClick}
+          priorities={data?.priorities}
+          selectedValue={priority || data?.todo?.priority?.id}
+          onRadioClick={e => setPriority(e.target.value)}
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color="primary">
+        <Button
+          onClick={async () => {
+            await updateTodo({
+              variables: {
+                updateTodoInput: {
+                  id,
+                  comment,
+                  date,
+                  priorityId: priority
+                }
+              }
+            })
+
+            handleClose()
+            setDate()
+            setComment()
+            setPriority()
+          }}
+          color="primary"
+        >
           Update
         </Button>
-        <Button onClick={handleClose} color="secondary">
+        <Button
+          onClick={() => {
+            handleClose()
+            setDate()
+            setComment()
+            setPriority()
+          }}
+          color="secondary"
+        >
           Cancel
         </Button>
       </DialogActions>
@@ -81,5 +124,38 @@ const useStyles = makeStyles(theme => ({
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />
 })
+
+DialogWrapper.query = {
+  getData: gql`
+    query GetData($id: ID!) {
+      todo(id: $id) {
+        date
+        comment
+        priority {
+          id
+          title
+        }
+      }
+      priorities {
+        id
+        rank
+        title
+      }
+    }
+  `
+}
+
+DialogWrapper.mutation = {
+  updateTodo: gql`
+    mutation UpdateTodoMutation($updateTodoInput: TodoUpdateInput!) {
+      updateTodo(input: $updateTodoInput) {
+        result {
+          id
+          comment
+        }
+      }
+    }
+  `
+}
 
 export default DialogWrapper

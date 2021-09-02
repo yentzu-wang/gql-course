@@ -13,7 +13,7 @@ const RadioButtonSection = ({ priorities, selectedValue, onRadioClick }) => {
               key={id}
               checked={selectedValue === id}
               onChange={onRadioClick}
-              value={title}
+              value={id}
               name="radio-button-high"
               inputProps={{ "aria-label": "High" }}
             />
@@ -27,7 +27,7 @@ const RadioButtonSection = ({ priorities, selectedValue, onRadioClick }) => {
               key={id}
               checked={selectedValue === id}
               onChange={onRadioClick}
-              value={title}
+              value={id}
               name="radio-button-high"
               inputProps={{ "aria-label": "High" }}
             />
@@ -41,7 +41,7 @@ const RadioButtonSection = ({ priorities, selectedValue, onRadioClick }) => {
               key={id}
               checked={selectedValue === id}
               onChange={onRadioClick}
-              value={title}
+              value={id}
               name="radio-button-high"
               inputProps={{ "aria-label": "High" }}
             />

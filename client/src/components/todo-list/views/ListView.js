@@ -18,8 +18,6 @@ const ListView = () => {
   const classes = useStyles()
   const { loading, data } = useQuery(ListView.query.todos)
 
-  console.log(data)
-
   if (loading) {
     return <div>loading...</div>
   }
