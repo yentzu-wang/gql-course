@@ -38,7 +38,6 @@ const DialogWrapper = ({ open, handleClose, selectedValue, onRadioClick }) => {
         <br />
         <br />
         <TextField
-          id="detail"
           label="Detail"
           type="text"
           className={classes.textField}
