@@ -4,7 +4,7 @@ import EditIcon from "@material-ui/icons/Edit"
 import styled from "styled-components"
 import DialogWrapper from "./DialogWrapper"
 
-const Todo = () => {
+const Todo = ({ data }) => {
   const [open, setOpen] = useState(false)
   const [selectedValue, setSelectedValue] = useState("high")
 
@@ -23,14 +23,17 @@ const Todo = () => {
   return (
     <>
       <Wrapper>
-        <div>2021/01/01</div>
-        <div style={{ marginLeft: 10, marginRight: "auto" }}>content</div>
-        <div style={{ marginLeft: 10 }}>優先度：高</div>
+        <div>{data?.date}</div>
+        <div style={{ marginLeft: 10, marginRight: "auto" }}>
+          {data?.content}
+        </div>
+        <div style={{ marginLeft: 10 }}>優先度：{data?.priority?.title}</div>
         <Button style={{ marginLeft: 10 }} onClick={handleClickOpen}>
           <EditIcon />
         </Button>
       </Wrapper>
       <DialogWrapper
+        id={data?.id}
         open={open}
         handleClose={handleClose}
         selectedValue={selectedValue}

@@ -16,20 +16,22 @@ const useStyles = makeStyles({
 
 const ListView = () => {
   const classes = useStyles()
-  const { loading, error, data } = useQuery(ListView.query.todos)
+  const { loading, data } = useQuery(ListView.query.todos)
 
   console.log(data)
 
-  // TODO: todo-list data binding
+  if (loading) {
+    return <div>loading...</div>
+  }
 
   return (
     <>
       <div>
         <Card className={classes.root} variant="outlined">
           <CardContent>
-            <Todo />
-            <Todo />
-            <Todo />
+            {data?.todos?.map(todo => (
+              <Todo key={todo.id} data={todo} />
+            ))}
           </CardContent>
         </Card>
       </div>
