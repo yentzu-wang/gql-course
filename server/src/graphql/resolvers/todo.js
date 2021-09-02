@@ -51,6 +51,19 @@ export default {
         id: v._id,
         priority: priorityHashTable?.[v.priority]
       }))
+    },
+    priorities: async () => {
+      const priorities = await getCollection(
+        db.TODO_LIST,
+        dbCollection.PRIORITIES
+      )
+      const priorityCursor = priorities.find()
+      const priorityValues = await priorityCursor.toArray()
+
+      return priorityValues.map(v => ({
+        ...v,
+        id: v._id
+      }))
     }
   },
   Mutation: {
