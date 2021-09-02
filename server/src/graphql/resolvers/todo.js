@@ -95,7 +95,7 @@ export default {
         return { status: "FAILED", message: err.message }
       }
     },
-    updateTodo: async (_, { input: { id, ...restArgs } }) => {
+    updateTodo: async (_, { input: { id, priorityId, ...restArgs } }) => {
       try {
         const collection = await getCollection(db.TODO_LIST, dbCollection.TODOS)
 
@@ -103,7 +103,7 @@ export default {
           {
             _id: ObjectId(id)
           },
-          { $set: { ...restArgs } }
+          { $set: { ...restArgs, priorityId } }
         )
 
         const todo = await collection.findOne({

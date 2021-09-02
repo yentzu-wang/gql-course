@@ -9,7 +9,7 @@ export default gql`
     "內容"
     comment: String!
     "優先度"
-    priority: Priority!
+    priority: Priority
   }
 
   type Priority {
@@ -37,7 +37,7 @@ export default gql`
     "內容"
     comment: String
     "優先度"
-    priority: String
+    priorityId: ID!
   }
 
   "Values to create a priority option"
